@@ -69,3 +69,6 @@ npm install -g bingocode
 bingo       #服务台
 bingocode   #聊天窗口
 ```
+
+
+Modified Form ：https://github.com/NanmiCoder/cc-haha
