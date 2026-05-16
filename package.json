@@ -1,6 +1,6 @@
 {
   "name": "bingocode",
-  "version": "1.0.41",
+  "version": "1.1.65",
   "type": "module",
   "bin": {
     "claude": "bin/claude-win.cjs",
@@ -16,6 +16,21 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
   },
+  "files": [
+    "bin/",
+    "src/",
+    "scripts/",
+    "stubs/",
+    "config/",
+    ".claude/",
+    "runtime/",
+    "preload.ts",
+    ".env.example",
+    "package.json",
+    "tsconfig.json",
+    "README.md",
+    "bunfig.toml"
+  ],
   "dependencies": {
     "@alcalzone/ansi-tokenize": "^0.3.0",
     "@anthropic-ai/sandbox-runtime": "^0.0.44",
@@ -40,6 +55,7 @@
     "chokidar": "^5.0.0",
     "cli-boxes": "^4.0.1",
     "code-excerpt": "^4.0.0",
+    "commander": "^14.0.3",
     "diff": "^8.0.4",
     "emoji-regex": "^10.6.0",
     "env-paths": "^4.0.0",

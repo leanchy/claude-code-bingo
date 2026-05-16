@@ -98,11 +98,12 @@ presets:
 
   - id: deepseek
     name: DeepSeek
-    baseUrl: https://api.deepseek.com
-    apiFormat: openai_chat
+    baseUrl: https://api.deepseek.com/anthropic
+    apiFormat: anthropic
     needsApiKey: true
     websiteUrl: https://platform.deepseek.com
-    modelsUrl: /v1/models
+    # 模型列表走 OpenAI 端（/anthropic 路径下无 /v1/models）
+    modelsUrl: https://api.deepseek.com/v1/models
     modelsAuthStyle: bearer
     modelsDataPath: data
     fields:
@@ -123,7 +124,7 @@ presets:
     apiFormat: openai_chat
     needsApiKey: true
     websiteUrl: https://open.bigmodel.cn
-    modelsUrl: /models
+    modelsUrl: /v4/models
     modelsAuthStyle: bearer
     modelsDataPath: data
     fields:
@@ -136,11 +137,11 @@ presets:
         label: API Key
         required: true
         secret: true
-        placeholder: '智谱 API Key'
+        placeholder: '智谱 API Key (glm-5.1)'
 
   - id: kimi
     name: Kimi
-    baseUrl: https://api.moonshot.cn/v1
+    baseUrl: https://api.moonshot.ai/v1
     apiFormat: openai_chat
     needsApiKey: true
     websiteUrl: https://platform.moonshot.cn
@@ -157,11 +158,11 @@ presets:
         label: API Key
         required: true
         secret: true
-        placeholder: 'Moonshot API Key'
+        placeholder: 'Moonshot API Key (kimi-k2.6)'
 
   - id: minimax
     name: MiniMax
-    baseUrl: https://api.minimaxi.com/v1
+    baseUrl: https://api.minimax.io/v1
     apiFormat: openai_chat
     needsApiKey: true
     websiteUrl: https://platform.minimaxi.com
@@ -178,7 +179,7 @@ presets:
         label: API Key
         required: true
         secret: true
-        placeholder: 'MiniMax API Key'
+        placeholder: 'MiniMax API Key (MiniMax-M2.7)'
 
   - id: custom
     name: Custom

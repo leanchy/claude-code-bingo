@@ -43,9 +43,16 @@ export function anthropicToOpenaiChat(body: AnthropicRequest): OpenAIChatRequest
     stream: body.stream,
   }
 
-  // max_tokens — omit to let upstream provider use its own default/max.
-  // Claude Code sends very large values (e.g. 128K) that exceed many
-  // providers' limits (DeepSeek: 8192, etc.).
+  // max_tokens — limit for DeepSeek to avoid invalid parameter errors
+  if (body.max_tokens !== undefined) {
+    if (body.model.toLowerCase().includes('deepseek')) {
+      // DeepSeek R1 often fails if max_tokens is set to Claude's high defaults (like 128k)
+      // Especially when tools or thinking are involved. 8192 is a safe upper limit for most.
+      result.max_tokens = Math.min(body.max_tokens, 8192)
+    } else {
+      result.max_tokens = body.max_tokens
+    }
+  }
 
   // temperature & top_p
   if (body.temperature !== undefined) result.temperature = body.temperature
@@ -76,7 +83,7 @@ export function anthropicToOpenaiChat(body: AnthropicRequest): OpenAIChatRequest
   }
 
   // thinking → reasoning_effort
-  if (body.thinking) {
+  if (body.thinking && !body.model.toLowerCase().includes('deepseek')) {
     const budget = body.thinking.budget_tokens
     if (budget !== undefined) {
       if (budget <= 1024) result.reasoning_effort = 'low'

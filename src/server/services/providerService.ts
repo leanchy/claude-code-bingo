@@ -498,7 +498,8 @@ export class ProviderService {
     }
 
     const modelsUrl = preset?.modelsUrl || '/v1/models'
-    const url = `${base}${modelsUrl}`
+    // modelsUrl 为绝对 URL 时直接使用（如 DeepSeek: baseUrl 是 anthropic 端，模型列表需走 OpenAI 端）
+    const url = modelsUrl.startsWith('http') ? modelsUrl : `${base}${modelsUrl}`
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -516,8 +517,9 @@ export class ProviderService {
       const directOpts = getDirectFetchOptions()
       const res = await fetch(url, { headers, signal: AbortSignal.timeout(10000), ...directOpts })
       if (!res.ok) {
-        console.error(`[ProviderService] Failed to fetch models from ${url}: ${res.status}`)
-        return []
+        const errText = await res.text().catch(() => '')
+        console.error(`[ProviderService] Failed to fetch models from ${url}: ${res.status} ${errText}`)
+        throw new Error(`HTTP ${res.status}: ${errText.slice(0, 200)}`)
       }
       const data = await res.json() as any
       const dataPath = preset?.modelsDataPath || 'data'
@@ -526,7 +528,7 @@ export class ProviderService {
       return list.map((m: any) => (typeof m === 'string' ? m : m.id)).filter(Boolean)
     } catch (err) {
       console.error(`[ProviderService] Error fetching models from ${url}:`, err)
-      return []
+      throw err
     }
   }
 
@@ -553,14 +555,19 @@ export class ProviderService {
       }
     }
 
-    // 兜底：如果仍然没有有效的 modelId，直接返回有意义的错误
+    // 兜底：动态拉取失败时，按 apiFormat 使用通用 fallback 模型做连通性测试
     if (!modelId) {
-      return {
-        connectivity: {
-          success: false,
-          latencyMs: 0,
-          error: '无法确定测试用模型：models.main 为空且自动拉取模型列表失败。请先在槽位配置中选择模型，或检查 API Key 和网络连接。',
-        },
+      if (apiFormat === 'anthropic') {
+        modelId = 'claude-3-5-haiku-20241022'
+      } else {
+        // openai_chat / openai_responses: 无法确定模型，返回有意义的错误
+        return {
+          connectivity: {
+            success: false,
+            latencyMs: 0,
+            error: '无法确定测试用模型：models.main 为空且自动拉取模型列表失败。请先在槽位配置中选择模型，或检查 API Key 和网络连接。',
+          },
+        }
       }
     }
 
