@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2025-2026 Leanchy
+Copyright (c) 2026 leanchy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,11 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-BingoCode is an independent open-source project by Leanchy, built upon and
-substantially modified from Claude Code (originally developed by Anthropic, PBC).
-Original upstream components remain the property of their respective copyright holders.
-All modifications, extensions, and original contributions in this repository are
-copyright Leanchy, released under the MIT License above.
